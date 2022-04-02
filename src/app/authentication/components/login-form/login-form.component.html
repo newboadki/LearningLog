@@ -1,1 +1,25 @@
-<p>login-form works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div>
+    <p>Login</p>
+    <div>
+      <label for="username">Username:</label>
+      <input id="username" type="text" formControlName="username" />
+
+      <div *ngIf="isUsernameInvalid()">
+        <div *ngIf="isUsernameRequiredError()">Username is required</div>
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input id="password" type="text" formControlName="password" />
+      <div *ngIf="isPasswordInvalid()">
+        <div *ngIf="isPasswordRequiredError()">Password is required</div>
+      </div>
+    </div>
+
+    <div>
+      <input type="submit" />
+    </div>
+  </div>
+</form>
