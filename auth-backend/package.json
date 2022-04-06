@@ -1,0 +1,16 @@
+{
+  "name": "auth-backend",
+  "version": "1.0.0",
+  "description": "A simple service to authenticate login requests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Borja Arias Drake",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
