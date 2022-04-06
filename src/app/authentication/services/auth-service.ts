@@ -10,6 +10,9 @@ import * as moment from 'moment';
   providedIn: 'root',
 })
 export class AuthService {
+  private idTokenKey: string = 'id_token';
+  private expiresAtKey: string = 'expires_at';
+
   constructor(public storageService: Storage, private httpClient: HttpClient) {}
 
   login(credentials: AuthCredentials): Observable<boolean> {
@@ -28,8 +31,8 @@ export class AuthService {
   }
 
   logout() {
-    this.storageService.removeItem('id_token');
-    this.storageService.removeItem('expires_at');
+    this.storageService.removeItem(this.idTokenKey);
+    this.storageService.removeItem(this.expiresAtKey);
   }
 
   loggedIn(): boolean {
@@ -38,20 +41,20 @@ export class AuthService {
   }
 
   getAuthToken(): string | null {
-    return this.storageService.getItem('id_token');
+    return this.storageService.getItem(this.idTokenKey);
   }
 
   private setSession(authResponse: AuthResponse): void {
     const expiresAt = moment().add(authResponse.expiresIn, 'minutes');
-    this.storageService.setItem('id_token', authResponse.jwt);
+    this.storageService.setItem(this.idTokenKey, authResponse.jwt);
     this.storageService.setItem(
-      'expires_at',
+      this.expiresAtKey,
       JSON.stringify(expiresAt.valueOf())
     );
   }
 
   private getExpiration(): object | null {
-    const expiration = this.storageService.getItem('expires_at');
+    const expiration = this.storageService.getItem(this.expiresAtKey);
     if (expiration != null) {
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
