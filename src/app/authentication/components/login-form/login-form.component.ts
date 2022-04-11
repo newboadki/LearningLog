@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth-service';
+import { Router } from '@angular/router';
+import { RoutingPaths } from '../../../app.routes';
 
 @Component({
   selector: 'app-login-form',
@@ -11,7 +14,11 @@ export class LoginFormComponent implements OnInit {
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   isSubmitted: boolean = false;
 
@@ -23,6 +30,10 @@ export class LoginFormComponent implements OnInit {
       this.loginForm.reset();
       return;
     }
+
+    this.authService.login(this.loginForm.value).subscribe((result) => {
+      this.router.navigateByUrl(RoutingPaths.learningLogPath);
+    });
   }
 
   isUsernameInvalid(): boolean {

@@ -1,22 +1,72 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginFormComponent } from './login-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
+import { of } from 'rxjs';
+import { RoutingPaths } from '../../../app.routes';
+import { AppRoutingModule } from '../../../app-routing.module';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
   let fixture: ComponentFixture<LoginFormComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
     await TestBed.configureTestingModule({
       declarations: [LoginFormComponent],
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, AppRoutingModule],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: authServiceSpy,
+        },
+        {
+          provide: Router,
+          useValue: routerSpy,
+        },
+      ],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  it('should call the service on submit', async function () {
+    authServiceSpy.login.and.returnValue(of(true));
+
+    const usernameInputElement: HTMLInputElement =
+      fixture.debugElement.nativeElement
+        .querySelector('#loginForm')
+        .querySelectorAll('input')[0];
+    // When
+    usernameInputElement.value = 'testuser_63';
+    usernameInputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const passwordInputElement: HTMLInputElement =
+      fixture.debugElement.nativeElement
+        .querySelector('#loginForm')
+        .querySelectorAll('input')[1];
+    // When
+    passwordInputElement.value = 'secret';
+    passwordInputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.onSubmit();
+
+    expect(authServiceSpy.login.calls.count())
+      .withContext('one call to login')
+      .toBe(1);
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledOnceWith(
+      RoutingPaths.learningLogPath
+    );
   });
 
   it('should create', () => {
@@ -24,7 +74,7 @@ describe('LoginFormComponent', () => {
   });
 
   it('should contain two input fields', function () {
-    // Givem
+    // Given
     const formElement =
       fixture.debugElement.nativeElement.querySelector('#loginForm');
     // When
