@@ -4,9 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LearningLogComponent } from './learning-log/components/learning-log.component';
-import { AuthenticationModule } from './authentication/authentication.module';
+import { SignupModule } from './signup/signup.module';
 import { CoreModule } from './core/core.module';
-import { AuthModule } from './core/auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent, LearningLogComponent],
@@ -15,7 +14,7 @@ import { AuthModule } from './core/auth/auth.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AuthenticationModule,
+    SignupModule,
   ],
   bootstrap: [AppComponent],
 })

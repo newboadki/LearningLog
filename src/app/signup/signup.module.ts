@@ -9,4 +9,4 @@ import { AuthModule } from '../core/auth/auth.module';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, AuthModule],
   exports: [LoginFormComponent],
 })
-export class AuthenticationModule {}
+export class SignupModule {}
