@@ -8,7 +8,10 @@ import { AuthGuard } from './core/auth/guards/auth-guards';
 const routes: Routes = [
   {
     path: RoutingPaths.loginPath,
-    component: LoginFormComponent,
+    loadChildren: () =>
+      import('./public-feature/signup/signup.module').then(
+        (m) => m.SignupModule
+      ),
   },
   {
     path: RoutingPaths.learningLogPath,
