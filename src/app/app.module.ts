@@ -4,18 +4,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LearningLogComponent } from './learning-log/components/learning-log.component';
-import { authModuleHttpInterceptorProviders } from './authentication/interceptors/auth-module-interceptors-index';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { CoreModule } from './core/core.module';
+import { AuthModule } from './core/auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent, LearningLogComponent],
   imports: [
+    CoreModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     AuthenticationModule,
   ],
-  providers: [authModuleHttpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

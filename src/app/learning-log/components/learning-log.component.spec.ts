@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LearningLogComponent } from './learning-log.component';
 import { LearningLogService } from '../services/learning-log-service';
-import { AuthService } from '../../authentication/services/auth-service';
 
 describe('LearningLogComponent', () => {
   let component: LearningLogComponent;
