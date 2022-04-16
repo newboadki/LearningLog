@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginFormComponent } from './public-feature/signup/components/login-form/login-form.component';
-import { LearningLogComponent } from './learning-log/components/learning-log.component';
 import { RoutingPaths } from './app.routes';
 import { AuthGuard } from './core/auth/guards/auth-guards';
 
@@ -15,7 +13,10 @@ const routes: Routes = [
   },
   {
     path: RoutingPaths.learningLogPath,
-    component: LearningLogComponent,
+    loadChildren: () =>
+      import('./learning-log/leaning-log.module').then(
+        (m) => m.LearningLogModule
+      ),
     canActivate: [AuthGuard],
   },
 ];
