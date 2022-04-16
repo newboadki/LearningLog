@@ -3,9 +3,9 @@ import { LoginFormComponent } from './login-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { RoutingPaths } from '../../../app.routes';
-import { AppRoutingModule } from '../../../app-routing.module';
-import { AuthService } from '../../../core/auth/services/auth-service';
+import { RoutingPaths } from '../../../../app.routes';
+import { AppRoutingModule } from '../../../../app-routing.module';
+import { AuthService } from '../../../../core/auth/services/auth-service';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;

@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LearningLogComponent } from './learning-log/components/learning-log.component';
-import { SignupModule } from './signup/signup.module';
+import { SignupModule } from './public-feature/signup/signup.module';
 import { CoreModule } from './core/core.module';
 
 @NgModule({
