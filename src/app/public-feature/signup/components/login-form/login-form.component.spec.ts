@@ -37,33 +37,17 @@ describe('LoginFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should call the service on submit', async function () {
+  it('should call the service on submit and navigate to learning log', async function () {
+    // Given
     authServiceSpy.login.and.returnValue(of(true));
 
-    const usernameInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[0];
     // When
-    usernameInputElement.value = 'testuser_63';
-    usernameInputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-
-    const passwordInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[1];
-    // When
-    passwordInputElement.value = 'secret';
-    passwordInputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
+    await fillInUsername('testuser_63', fixture);
+    await fillInPassword('secret', fixture);
     component.onSubmit();
 
-    expect(authServiceSpy.login.calls.count())
-      .withContext('one call to login')
-      .toBe(1);
+    // Then
+    expect(authServiceSpy.login.calls.count()).toBe(1);
     expect(routerSpy.navigateByUrl).toHaveBeenCalledOnceWith(
       RoutingPaths.learningLogPath
     );
@@ -94,10 +78,7 @@ describe('LoginFormComponent', () => {
 
   it('should have a required username error by default', function () {
     // Given
-    const usernameInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[0];
+    const usernameInputElement = getUsernameInputElement(fixture);
     // When
     const usernameValue = component.loginForm.get('username');
     // Then
@@ -108,10 +89,7 @@ describe('LoginFormComponent', () => {
 
   it('should have a required password error by default', function () {
     // Given
-    const passwordInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[1];
+    const passwordInputElement = getPasswordInputElement(fixture);
     // When
     const passwordValue = component.loginForm.get('password');
     // Then
@@ -122,56 +100,69 @@ describe('LoginFormComponent', () => {
 
   it('should update the username in the formGroup when the input field changes', async function () {
     // Given
-    const usernameInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[0];
+    const usernameInputElement = getUsernameInputElement(fixture);
     // When
-    usernameInputElement.value = 'testuser_63';
-    usernameInputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const usernameGroupValue = component.loginForm.get('username');
+    await fillInUsername('testuser_63', fixture);
     // Then
+    const usernameGroupValue = component.loginForm.get('username');
     expect(usernameInputElement.value).toEqual(usernameGroupValue!.value);
     expect(usernameGroupValue?.errors).toBeNull();
   });
 
   it('should update the password in the formGroup when the input field changes', async function () {
     // Given
-    const passwordInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[1];
+    const passwordInputElement = getPasswordInputElement(fixture);
     // When
-    passwordInputElement.value = 'secret';
-    passwordInputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const passwordGroupValue = component.loginForm.get('password');
+    await fillInPassword('secret', fixture);
     // then
+    const passwordGroupValue = component.loginForm.get('password');
     expect(passwordInputElement.value).toEqual(passwordGroupValue!.value);
     expect(passwordGroupValue?.errors).toBeNull();
   });
 
   it('should make the form valid when username and password are valid', async function () {
-    // Given
-    const usernameInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[0];
-    const passwordInputElement: HTMLInputElement =
-      fixture.debugElement.nativeElement
-        .querySelector('#loginForm')
-        .querySelectorAll('input')[1];
     // When
-    usernameInputElement.value = 'testuser_63';
-    passwordInputElement.value = 'secret';
-    usernameInputElement.dispatchEvent(new Event('input'));
-    passwordInputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await fillInUsername('testuser_63', fixture);
+    await fillInPassword('secret', fixture);
     // Then
     expect(component.loginForm.valid).toBeTruthy();
   });
 });
+
+function getUsernameInputElement(
+  fixture: ComponentFixture<LoginFormComponent>
+): HTMLInputElement {
+  return fixture.debugElement.nativeElement
+    .querySelector('#loginForm')
+    .querySelectorAll('input')[0];
+}
+
+function getPasswordInputElement(
+  fixture: ComponentFixture<LoginFormComponent>
+): HTMLInputElement {
+  return fixture.debugElement.nativeElement
+    .querySelector('#loginForm')
+    .querySelectorAll('input')[1];
+}
+
+async function fillInUsername(
+  newValue: any,
+  fixture: ComponentFixture<LoginFormComponent>
+) {
+  const usernameInputElement = getUsernameInputElement(fixture);
+  usernameInputElement.value = newValue;
+  usernameInputElement.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
+async function fillInPassword(
+  newValue: any,
+  fixture: ComponentFixture<LoginFormComponent>
+) {
+  const passwordInputElement = getPasswordInputElement(fixture);
+  passwordInputElement.value = newValue;
+  passwordInputElement.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
